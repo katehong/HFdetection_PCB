@@ -279,6 +279,8 @@ void loop(){
        elapTime = 0;
        prevLevState = 0;
        levPressDur = 0;
+       startLevLiftCheck = 0;
+       
        while (elapTime <= stimDuration) {
          time = millis();
          elapTime = time - trigTime; 
@@ -310,9 +312,11 @@ void loop(){
        } // END while loop 
           digitalWrite(optoPin, LOW);
           digitalWrite(startPin, LOW); // turn off start pin at end of trial to trigger matlab
+      
       //  move stimback to rest position
       stimStepper.step(stimCCW);
       delay(200);
+      digitalWrite(enablePin, LOW);
        
        // digitalWrite(optoPin, LOW);
        
