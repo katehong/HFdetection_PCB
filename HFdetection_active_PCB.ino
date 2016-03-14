@@ -3,15 +3,10 @@ Detection task (1 stim, placed below whiskers). Uses stepper motor
 Rewritten from Clay's program for learning arduino.
 To be used with optostim.
 */
-
- 
 // set up behavior parameters that wont' change during session:
-
 
 String programName = "headfix_RackCatchLiftOptoTTL_Kate_112513.pde" ; 
 String notes = "for triggering laser during random trials during Go-nogo detection task";
-
-
 
 // constants that frequently change:
 const int rewSolDur = 80; //how long solenoid valve should open to deliver water reward
@@ -46,8 +41,6 @@ const int speakerPin = 11; //speaker pin
 Stepper stimStepper(stepsPerRevolution, motorPin1, motorPin2);
 
 // define variables that will change:
-
-
 int hallThresh = 700;
 int hallSensValue = 0;          // variable for reading the hall sensor status
 int levPressThreshold = 500; // how long lever has to be held to start
@@ -76,7 +69,6 @@ long currentTime=0;
 long trigTime = 0;
 long levLiftTime = 0;
 long randNumber = 0;    // random number for whisker stimulus
-
 
 void setup() {
   // initialize the LED pin as an output:
@@ -111,9 +103,7 @@ void setup() {
 }
 
 void loop(){
-
  ///////////////////START TRIALS
-
  //make sure lever is pressed before starting trials.
   if (optoStart == 0){
     time = millis();
@@ -127,7 +117,7 @@ void loop(){
 //    if (prevLevState2 == 1) {
 //    // check for lever presses during this round when no stimulus is present
 //    levState = digitalRead(leverPin);
-    
+
   leverState = digitalRead(leverPin);
   if (leverState == HIGH){
     if(prevLevState == 0) { // if previously not pressed --as in beginning of session
@@ -279,6 +269,8 @@ void loop(){
        elapTime = 0;
        prevLevState = 0;
        levPressDur = 0;
+       startLevLiftCheck = 0;
+       
        while (elapTime <= stimDuration) {
          time = millis();
          elapTime = time - trigTime; 
@@ -310,9 +302,11 @@ void loop(){
        } // END while loop 
           digitalWrite(optoPin, LOW);
           digitalWrite(startPin, LOW); // turn off start pin at end of trial to trigger matlab
+      
       //  move stimback to rest position
       stimStepper.step(stimCCW);
       delay(200);
+      digitalWrite(enablePin, LOW);
        
        // digitalWrite(optoPin, LOW);
        
